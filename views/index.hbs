@@ -1,19 +1,138 @@
-<h1>Welcome to abhinav site</h1>
-<h1>get request</h1>
-<form action="/teacher/data" method="get">
-  <label for="fname">First name:</label><br>
-  <input type="text" id="fname" name="fname" value=""><br>
-  <label for="lname">Last name:</label><br>
-  <input type="text" id="lname" name="lname" value=""><br><br>
-  <input type="submit" value="Submit">
-</form>
+{{!-- <div class="title">
+    <div class="content">
+        {{#if name}}
+        <h2>Thank you for signing up with {{email}}. Welcome {{name}} to the Tier-3 college.
+            We pray that you will not be able to achieve any goal of life.
+        </h2>
+        {{else}}
+        <h1>Welcome to {{title}}</h1>
+        <h2>Sign Up Form</h2>
+        <form action="/signup" method="post">
+            <div class="email">
+                <input type="text" name="nameInput" id="" placeholder="Enter your name"><br><br>
+                <input type="email" name="emailInput" id="" placeholder="Email Address"><br><br>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        {{/if}}
+    </div>
+</div> --}}
 
-<h1>post request</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<form action="/teacher/about" method="post">
-  <label for="fname">First name:</label><br>
-  <input type="text" id="fname" name="fname" value=""><br>
-  <label for="lname">Last name:</label><br>
-  <input type="text" id="lname" name="lname" value=""><br><br>
-  <input type="submit" value="Submit">
-</form>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCC Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="calc">
+            <div class="calc_title"><span>CALCULATOR</span></div>
+            <form>
+                <div class="calc_body">
+                    <label for="num1">Number 1 : </label> <input type="number" class="num1" id="num1"
+                        name="num1"><br><br>
+                    <label for="num2">Number 2 : </label> <input type="number" class="num2" id="num2"
+                        name="num2"><br><br>
+                    <button class="add" id="add">ADD</button>
+                    <button class="sub" id="sub">SUBTRACT</button>
+                    <button class="mul" id="mul">MULTIPLY</button><br><br>
+
+                    <div class="answer" id="ans">Result : </div>
+
+                </div>
+            </form>
+
+            <div class="history">
+                <table class="hist_tb">
+                    <caption>HISTORY</caption>
+                    <thead>
+                        <tr>
+                            <th>Num 1</th>
+                            <th>Num 2</th>
+                            <th>Operation</th>
+                            <th>Result</th>
+                            <th>Operator</th>
+                            <th>Submit</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{!-- <tr>
+                            <td class="n1"></td>
+                            <td class="n2"></td>
+                            <td class="op"></td>
+                            <td class="res"></td>
+                            <td class="sop"></td>
+                            <td class="btn"></td>
+                        </tr> --}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(() => {
+            $("#add").click(function (event) {
+                event.preventDefault();
+                var x = $(".num1").val();
+                var y = $(".num2").val();
+                $.post({ url: "/add", data: { a: x, b: y } }).then((data) => {
+                    console.log(data);
+                    if (x == "" || y == "") {
+                        alert("Enter num1 and num2");
+                    }
+                    else {
+                        $('#ans').empty().append('Result : ' + data);
+                        var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "+" + "</td><td>" + data + "</td><td> <select id='oper'><option value='+'>+</option><option value='-'>-</option><option value='*'>*</option></select> </td><td>" + " <button>Submit</button> </td></tr>";
+                        $(".hist_tb tbody").append(hist_data);
+                    }
+                });
+            });
+        });
+
+        $("#sub").click(function (event) {
+            event.preventDefault();
+            var x = $(".num1").val();
+            var y = $(".num2").val();
+            $.post({ url: "/sub", data: { a: x, b: y } }).then((data) => {
+                console.log(data);
+                if (x == "" || y == "") {
+                    alert("Enter num1 and num2");
+                }
+                else {
+                    $('#ans').empty().append('Result : ' + data);
+                    var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "-" + "</td><td>" + data + "</td><td> <select id='oper'><option value='+'>+</option><option value='-'>-</option><option value='*'>*</option></select> </td><td>" + " <button>Submit</button> </td></tr>";
+                    $(".hist_tb tbody").append(hist_data);
+                }
+            });
+        });
+
+        $("#mul").click(function (event) {
+            event.preventDefault();
+            var x = $(".num1").val();
+            var y = $(".num2").val();
+            $.post({ url: "/mul", data: { a: x, b: y } }).then((data) => {
+                console.log(data);
+                if (x == "" || y == "") {
+                    alert("Enter num1 and num2");
+                }
+                else {
+                    $('#ans').empty().append('Result : ' + data);
+                    var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "*" + "</td><td>" + data + "</td><td> <select id='oper'><option value='+'>+</option><option value='-'>-</option><option value='*'>*</option></select> </td><td>" + " <button>Submit</button> </td></tr>";
+                    $(".hist_tb tbody").append(hist_data);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
